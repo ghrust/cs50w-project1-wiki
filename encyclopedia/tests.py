@@ -25,21 +25,26 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(util.list_entries(), response.context['entries'])
+        for entry in util.list_entries():
+            self.assertInHTML(f'<li>{entry}</li>', str(response.content))
 
     def test_entry_page(self):
         """Test entry page."""
 
+        c = Client()
+
         for entry in util.list_entries():
             url = f'/wiki/{entry}'
 
-            resp = self.client.get(url)
+            response = c.get(url)
 
             with open(f'./entries/{entry}.md') as ef:
                 ef_content = ef.readlines()
                 ef_content_html = markdown2.markdown(''.join(ef_content))
 
-            self.assertEqual(resp.status_code, 200)
-            self.assertEqual(ef_content_html, resp.context['entry_content'])
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(ef_content_html, response.context['entry_content'])
+            self.assertInHTML(f'<h1>{entry}</h1>', str(response.content))
 
 
 # views uses selenium
