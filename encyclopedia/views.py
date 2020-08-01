@@ -9,9 +9,11 @@ from . import util
 def index(request):
     """Main page."""
 
-    return render(request, "encyclopedia/index.html", {
+    context = {
         "entries": util.list_entries()
-    })
+    }
+
+    return render(request, "encyclopedia/index.html", context)
 
 
 def entry_page(request, entry_name):
