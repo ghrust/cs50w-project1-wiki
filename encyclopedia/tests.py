@@ -2,7 +2,6 @@ import os
 import markdown2
 
 from django.test import TestCase
-from django.template.defaultfilters import slugify
 
 from . import util
 
@@ -30,13 +29,13 @@ class EncyclopediaTestCase(TestCase):
         """Test entry page."""
 
         for entry in util.list_entries():
-            slug_entry = slugify(entry)
-            resp = self.client.get(f'/wiki/{slug_entry}')
+            url = f'/wiki/{entry}'
+
+            resp = self.client.get(url)
 
             with open(f'./entries/{entry}.md') as ef:
                 entry_file_content = ef.readlines()
                 ef_content_html = markdown2.markdown(''.join(entry_file_content))
-                print(ef_content_html)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual(entry_file_content, resp.context['entry_content'])
+            self.assertEqual(ef_content_html, resp.context['entry_content'])
