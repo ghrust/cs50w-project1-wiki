@@ -25,7 +25,7 @@ class EncyclopediaTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(util.list_entries(), response.context['entries'])
         for entry in util.list_entries():
-            self.assertInHTML(f'<li>{entry}</li>', str(response.content))
+            self.assertInHTML(f'<a href="/wiki/{entry}">{entry}</a>', str(response.content))
 
     def test_entry_page(self):
         """Test entry page."""
