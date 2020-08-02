@@ -44,3 +44,12 @@ class EncyclopediaTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(ef_content_html, response.context['entry_content'])
             self.assertInHTML(f'<h1>{entry}</h1>', str(response.content))
+
+    def test_error_entry_not_found(self):
+        """Test if file for requested entry is not found."""
+
+        c = Client()
+        url = '/wiki/file_not_found'
+        response = c.get(url)
+
+        self.assertEqual(response.status_code, 404)
