@@ -58,7 +58,7 @@ class EncyclopediaTestCase(TestCase):
         """Test for search feature."""
 
         c = Client()
-        url = '/wiki/search'
-        response = c.post(url, util.list_entries()[0])
+        url = '/search'
+        response = c.post(url, keyword=util.list_entries()[0])
 
         self.assertEqual(response.status_code, 200)

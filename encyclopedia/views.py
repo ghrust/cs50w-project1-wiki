@@ -1,8 +1,9 @@
 import markdown2
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from . import util
+from .forms import SearchForm
 
 
 def index(request):
@@ -33,3 +34,14 @@ def entry_page(request, entry_name):
         'entry_content': ef_content_html
     }
     return render(request, "encyclopedia/entry.html", context)
+
+
+def search(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            keyword = form.cleaned_data['keyword']
+            return redirect('entry_page', entry_name=keyword)
+
+    return redirect('index')
