@@ -42,6 +42,14 @@ def search(request):
 
         if form.is_valid():
             keyword = form.cleaned_data['keyword']
-            return redirect('entry_page', entry_name=keyword)
 
-    return redirect('index')
+            if keyword in util.list_entries():
+                return redirect('entry_page', entry_name=keyword)
+            else:
+                context = {
+                    'search_results': form.search_entry(keyword)
+                }
+                print(context)
+                return render(request, 'encyclopedia/search_results.html', context)
+
+    return redirect('entry_page', entry_name=keyword)
