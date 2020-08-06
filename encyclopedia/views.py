@@ -49,7 +49,6 @@ def search(request):
                 context = {
                     'search_results': form.search_entry(keyword)
                 }
-                print(context)
                 return render(request, 'encyclopedia/search_results.html', context)
 
-    return redirect('entry_page', entry_name=keyword)
+    return redirect('index')

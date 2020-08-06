@@ -54,11 +54,13 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_search(self):
-        """Test for search feature."""
+    def test_search_exact_match(self):
+        """Test for search feature. Exact match."""
 
         c = Client()
-        url = '/search'
-        response = c.post(url, keyword=util.list_entries()[0])
+        url = '/search/'
+        keyword = util.list_entries()[0]
+        response = c.post(url, {'keyword': keyword}, follow=True)
 
         self.assertEqual(response.status_code, 200)
+        self.assertInHTML(f'<h1>{keyword}</h1>', str(response.content))
