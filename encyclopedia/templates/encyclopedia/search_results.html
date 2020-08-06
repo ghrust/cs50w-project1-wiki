@@ -7,8 +7,12 @@
 {% block body %}
     <h1>Search results.</h1>
     <ul>
-        {% for item in search_results %}
-            <li><a href="/wiki/{{ item }}">{{ item }}</a></li>
-        {% endfor %}
+        {% if search_results %}
+            {% for item in search_results %}
+                <li><a href="/wiki/{{ item }}">{{ item }}</a></li>
+            {% endfor %}
+        {% else %}
+            <h3>Sorry. Entry not found.</h3>
+        {% endif %}
     </ul>
 {% endblock %}

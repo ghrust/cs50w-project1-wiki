@@ -5,7 +5,7 @@ from django import forms
 
 
 class SearchForm(forms.Form):
-    keyword = forms.CharField(required=True)
+    keyword = forms.CharField(label='', required=True, widget=forms.TextInput(attrs={'placeholder': 'Search Encyclopedia'}))
 
     def search_entry(self, keyword):
         result = []
