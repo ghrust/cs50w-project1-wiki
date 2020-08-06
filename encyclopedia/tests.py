@@ -54,6 +54,10 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+
+class EncyclopediaSearchTestCase(TestCase):
+    """Test case for search."""
+
     def test_search_exact_match(self):
         """Test search. Exact match."""
 
@@ -75,3 +79,14 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertInHTML('<li><a href="/wiki/Python">Python</a></li>', str(response.content))
+
+    def test_search_not_found(self):
+        """Test search. Not found."""
+
+        c = Client()
+        url = '/search/'
+        keyword = 'notFound'
+        response = c.post(url, {'keyword': keyword}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML('<h3>Sorry. Entry not found.</h3>', str(response.content))
