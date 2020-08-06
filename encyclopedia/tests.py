@@ -53,3 +53,40 @@ class EncyclopediaTestCase(TestCase):
         response = c.get(url)
 
         self.assertEqual(response.status_code, 404)
+
+
+class EncyclopediaSearchTestCase(TestCase):
+    """Test case for search."""
+
+    def test_search_exact_match(self):
+        """Test search. Exact match."""
+
+        c = Client()
+        url = '/search/'
+        keyword = util.list_entries()[0]
+        response = c.post(url, {'keyword': keyword}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML(f'<h1>{keyword}</h1>', str(response.content))
+
+    def test_search_substring(self):
+        """Test search. Substring."""
+
+        c = Client()
+        url = '/search/'
+        keyword = 'py'
+        response = c.post(url, {'keyword': keyword}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML('<li><a href="/wiki/Python">Python</a></li>', str(response.content))
+
+    def test_search_not_found(self):
+        """Test search. Not found."""
+
+        c = Client()
+        url = '/search/'
+        keyword = 'notFound'
+        response = c.post(url, {'keyword': keyword}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML('<h3>Sorry. Entry not found.</h3>', str(response.content))
