@@ -55,7 +55,7 @@ class EncyclopediaTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_search_exact_match(self):
-        """Test for search feature. Exact match."""
+        """Test search. Exact match."""
 
         c = Client()
         url = '/search/'
@@ -64,3 +64,14 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertInHTML(f'<h1>{keyword}</h1>', str(response.content))
+
+    def test_search_substring(self):
+        """Test search. Substring."""
+
+        c = Client()
+        url = '/search/'
+        keyword = 'py'
+        response = c.post(url, {'keyword': keyword}, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertInHTML('<li><a href="/wiki/Python">Python</a></li>', str(response.content))
