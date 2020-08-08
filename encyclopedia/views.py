@@ -1,3 +1,4 @@
+import random
 import markdown2
 
 from django.shortcuts import render, redirect
@@ -37,6 +38,8 @@ def entry_page(request, entry_name):
 
 
 def search(request):
+    """Search form."""
+
     if request.method == 'POST':
         form = SearchForm(request.POST)
 
@@ -52,3 +55,8 @@ def search(request):
                 return render(request, 'encyclopedia/search_results.html', context)
 
     return redirect('index')
+
+
+def random_page(request):
+    rand_entry_name = random.choice(util.list_entries())
+    return redirect('entry_page', entry_name=rand_entry_name)

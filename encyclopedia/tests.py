@@ -54,10 +54,6 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-
-class EncyclopediaSearchTestCase(TestCase):
-    """Test case for search."""
-
     def test_search_exact_match(self):
         """Test search. Exact match."""
 
@@ -90,3 +86,12 @@ class EncyclopediaSearchTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertInHTML('<h3>Sorry. Entry not found.</h3>', str(response.content))
+
+    def test_random_page(self):
+        """Test random page."""
+
+        c = Client()
+        url = ('/random_page/')
+        response = c.get(url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
