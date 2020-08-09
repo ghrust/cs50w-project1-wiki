@@ -67,17 +67,20 @@ def random_page(request):
 
 
 def new_page(request):
-    form = NewPageForm()
 
     if request.method == 'POST':
         form = NewPageForm(request.POST)
 
         if form.is_valid():
-            title = form.cleaned_data['title']
-            entry = form.cleaned_data['entry']
+            title = form.cleaned_data.get('title')
+            entry = form.cleaned_data.get('entry')
 
             form.save_entry_to_file(title, entry)
 
-            return redirect('entry_page', entry_name=title)
+            redirect('entry_page', entry_name=title)
+    else:
+        form = NewPageForm()
 
-    return render(request, 'encyclopedia/new_page.html', {'form': form})
+    context = {'form': form}
+
+    return render(request, 'encyclopedia/new_page.html', context)
