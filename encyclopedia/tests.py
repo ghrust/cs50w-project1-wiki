@@ -95,3 +95,27 @@ class EncyclopediaTestCase(TestCase):
         response = c.get(url, follow=True)
 
         self.assertEqual(response.status_code, 200)
+
+    def test_create_page(self):
+        """Test create page."""
+
+        c = Client()
+        url = ('/new_page/')
+        response = c.get(url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_page_post(self):
+        """Test create page. Post request."""
+
+        c = Client()
+        response = c.post(
+            '/new_page/',
+            {'file_name': 'new_entry', 'entry': '*Title'},
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(True, os.path.exists('./entries/new_entry.md'))
+
+        os.remove('./entries/new_entry.md')
