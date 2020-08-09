@@ -21,9 +21,12 @@ class SearchForm(forms.Form):
 class NewPageForm(forms.Form):
     """Form to create new page."""
 
-    file_name = forms.CharField(required=True)
+    title = forms.CharField(required=True)
     entry = forms.CharField(required=True)
 
-    def save_entry_to_file(self, file_name, entry):
-        with open(f'./entries/{file_name}.md', 'x') as ef:
-            ef.write(entry)
+    def save_entry_to_file(self, title, entry):
+        try:
+            with open(f'./entries/{title}.md', 'x') as ef:
+                ef.write(f'# {title}\n' + entry)
+        except FileExistsError as e:
+            print(e)

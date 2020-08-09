@@ -111,11 +111,11 @@ class EncyclopediaTestCase(TestCase):
         c = Client()
         response = c.post(
             '/new_page/',
-            {'file_name': 'new_entry', 'entry': '*Title'},
+            {'title': 'New_entry', 'entry': 'Content.'},
             follow=True
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(True, os.path.exists('./entries/new_entry.md'))
+        self.assertEqual(True, os.path.exists('./entries/New_entry.md'))
 
-        os.remove('./entries/new_entry.md')
+        os.remove('./entries/New_entry.md')

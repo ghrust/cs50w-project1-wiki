@@ -73,11 +73,11 @@ def new_page(request):
         form = NewPageForm(request.POST)
 
         if form.is_valid():
-            file_name = form.cleaned_data['file_name']
+            title = form.cleaned_data['title']
             entry = form.cleaned_data['entry']
 
-            form.save_entry_to_file(file_name, entry)
+            form.save_entry_to_file(title, entry)
 
-            return redirect('entry_page', entry_name=file_name)
+            return redirect('entry_page', entry_name=title)
 
     return render(request, 'encyclopedia/new_page.html', {'form': form})
