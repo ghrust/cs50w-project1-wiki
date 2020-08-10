@@ -4,7 +4,7 @@ import markdown2
 from django.shortcuts import render, redirect
 
 from . import util
-from .forms import SearchForm
+from .forms import SearchForm, NewPageForm
 
 
 def index(request):
@@ -52,7 +52,11 @@ def search(request):
                 context = {
                     'search_results': form.search_entry(keyword)
                 }
-                return render(request, 'encyclopedia/search_results.html', context)
+                return render(
+                    request,
+                    'encyclopedia/search_results.html',
+                    context
+                )
 
     return redirect('index')
 
@@ -60,3 +64,23 @@ def search(request):
 def random_page(request):
     rand_entry_name = random.choice(util.list_entries())
     return redirect('entry_page', entry_name=rand_entry_name)
+
+
+def new_page(request):
+
+    if request.method == 'POST':
+        form = NewPageForm(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            entry = form.cleaned_data.get('entry')
+
+            form.save_entry_to_file(title, entry)
+
+            redirect('entry_page', entry_name=title)
+    else:
+        form = NewPageForm()
+
+    context = {'form': form}
+
+    return render(request, 'encyclopedia/new_page.html', context)
