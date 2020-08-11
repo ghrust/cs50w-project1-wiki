@@ -119,3 +119,7 @@ class EncyclopediaTestCase(TestCase):
         self.assertEqual(True, os.path.exists('./entries/New_entry.md'))
 
         os.remove('./entries/New_entry.md')
+
+    def test_edit_page(self):
+        """Test edit page."""
+        pass

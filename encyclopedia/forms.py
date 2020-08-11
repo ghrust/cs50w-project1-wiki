@@ -45,3 +45,17 @@ class NewPageForm(forms.Form):
 
         with open(f'./entries/{title}.md', 'x') as ef:
             ef.write(f'# {title}\n' + entry)
+
+
+class EditPageForm(NewPageForm):
+    """Form for edit existing entries."""
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        return title
+
+    def update_entry_file(self, title, entry):
+        """Update entry file *.md"""
+
+        with open(f'./entries/{title}.md', 'w') as ef:
+            ef.write(f'# {title}\n' + entry)
