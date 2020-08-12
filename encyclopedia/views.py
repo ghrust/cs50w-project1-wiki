@@ -1,10 +1,11 @@
+import os
 import random
 import markdown2
 
 from django.shortcuts import render, redirect
 
 from . import util
-from .forms import SearchForm, NewPageForm
+from .forms import SearchForm, NewPageForm, EditPageForm
 
 
 def index(request):
@@ -77,10 +78,39 @@ def new_page(request):
 
             form.save_entry_to_file(title, entry)
 
-            redirect('entry_page', entry_name=title)
+            return redirect('entry_page', entry_name=title)
     else:
         form = NewPageForm()
 
     context = {'form': form}
 
     return render(request, 'encyclopedia/new_page.html', context)
+
+
+def edit_page(request, entry_name):
+
+    if request.method == 'POST':
+        form = EditPageForm(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            entry = form.cleaned_data['entry']
+
+            os.rename(f'./entries/{entry_name}.md', f'./entries/{title}.md')
+            form.update_entry_file(title, entry)
+
+            return redirect('entry_page', entry_name=title)
+    else:
+        with open(f'./entries/{entry_name}.md') as ef:
+            ef_content = ef.readlines()
+
+        data = {
+            'title': entry_name,
+            'entry': ''.join(ef_content[1:])
+        }
+
+        form = EditPageForm(data)
+
+    context = {'form': form}
+
+    return render(request, 'encyclopedia/edit_page.html', context)
