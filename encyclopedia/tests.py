@@ -122,4 +122,22 @@ class EncyclopediaTestCase(TestCase):
 
     def test_edit_page(self):
         """Test edit page."""
-        pass
+
+        c = Client()
+        response = c.post(
+            '/edit_page/test_before',
+            {'title': 'test_after', 'entry': 'content_after'},
+            follow=True
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('test_after', str(response.content))
+        self.assertIn('content_after', str(response.content))
+
+        response = c.post(
+            '/edit_page/test_after',
+            {'title': 'test_before', 'entry': 'content_before'},
+            follow=True
+        )
+
+        self.assertIn('test_before', str(response.content))
