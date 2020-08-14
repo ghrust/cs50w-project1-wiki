@@ -58,9 +58,8 @@ class EncyclopediaTestCase(TestCase):
         """Test search. Exact match."""
 
         c = Client()
-        url = '/search/'
         keyword = util.list_entries()[0]
-        response = c.post(url, {'keyword': keyword}, follow=True)
+        response = c.get(f'/search/?keyword={keyword}', follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertInHTML(f'<h1>{keyword}</h1>', str(response.content))
@@ -69,9 +68,8 @@ class EncyclopediaTestCase(TestCase):
         """Test search. Substring."""
 
         c = Client()
-        url = '/search/'
         keyword = 'py'
-        response = c.post(url, {'keyword': keyword}, follow=True)
+        response = c.get(f'/search/?keyword={keyword}', follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertInHTML('<li><a href="/wiki/Python">Python</a></li>', str(response.content))
@@ -80,9 +78,8 @@ class EncyclopediaTestCase(TestCase):
         """Test search. Not found."""
 
         c = Client()
-        url = '/search/'
         keyword = 'notFound'
-        response = c.post(url, {'keyword': keyword}, follow=True)
+        response = c.get(f'/search/?keyword={keyword}', follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertInHTML('<h3>Sorry. Entry not found.</h3>', str(response.content))
