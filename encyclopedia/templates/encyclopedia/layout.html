@@ -12,8 +12,7 @@
         <div class="row">
             <div class="sidebar col-lg-2 col-md-3">
                 <h2>Wiki</h2>
-                <form class="search" action="{% url 'search' %}" method="POST">
-                    {% csrf_token %}
+                <form class="search" action="{% url 'search' %}">
                     {{ search_form }}
                 </form>
                 <div>

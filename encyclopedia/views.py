@@ -41,25 +41,18 @@ def entry_page(request, entry_name):
 def search(request):
     """Search form."""
 
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-
-        if form.is_valid():
-            keyword = form.cleaned_data['keyword']
-
-            if keyword in util.list_entries():
-                return redirect('entry_page', entry_name=keyword)
-            else:
-                context = {
-                    'search_results': form.search_entry(keyword)
-                }
-                return render(
-                    request,
-                    'encyclopedia/search_results.html',
-                    context
-                )
-
-    return redirect('index')
+    keyword = request.GET['keyword']
+    if keyword in util.list_entries():
+        return redirect('entry_page', entry_name=keyword)
+    else:
+        context = {
+            'search_results': util.search_entry(keyword)
+        }
+        return render(
+            request,
+            'encyclopedia/search_results.html',
+            context
+        )
 
 
 def random_page(request):
