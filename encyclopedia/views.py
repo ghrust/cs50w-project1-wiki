@@ -5,7 +5,7 @@ import markdown2
 from django.shortcuts import render, redirect
 
 from . import util
-from .forms import SearchForm, NewPageForm, EditPageForm
+from .forms import NewPageForm, EditPageForm
 
 
 def index(request):
@@ -69,7 +69,7 @@ def new_page(request):
             title = form.cleaned_data.get('title')
             entry = form.cleaned_data.get('entry')
 
-            form.save_entry_to_file(title, entry)
+            util.save_entry(title, f'# {title}\n\n{entry}')
 
             return redirect('entry_page', entry_name=title)
     else:
@@ -90,7 +90,7 @@ def edit_page(request, entry_name):
             entry = form.cleaned_data['entry']
 
             os.rename(f'./entries/{entry_name}.md', f'./entries/{title}.md')
-            form.update_entry_file(title, entry)
+            util.save_entry(title, f'# {title}\n\n{entry}')
 
             return redirect('entry_page', entry_name=title)
     else:

@@ -101,6 +101,7 @@ class EncyclopediaTestCase(TestCase):
         response = c.get(url, follow=True)
 
         self.assertEqual(response.status_code, 200)
+        # TODO: test form is extsts.
 
     def test_create_page_post(self):
         """Test create page. Post request."""
@@ -114,6 +115,7 @@ class EncyclopediaTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(True, os.path.exists('./entries/New_entry.md'))
+        # TODO: test file content.
 
         os.remove('./entries/New_entry.md')
 
